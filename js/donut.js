@@ -14,6 +14,9 @@ class Caixa {
     this.xm0aux=0;
     this.ym0aux=0;
 
+    this.caminhoQ='';
+    this.caminhoC='';
+
     this.ponto=this.ponto.bind(this);
     this.circulo=this.circulo.bind(this);
     this.linha=this.linha.bind(this);
@@ -127,6 +130,9 @@ class Caixa {
         this.ptos=[];
         this.vecs=[];
         this.ptosaux=[];
+
+        this.caminhoQ='';
+        this.caminhoC='';
         this.svg.selectAll("circle").remove();
         this.svg.selectAll("line").remove();
         this.svg.selectAll("path").remove();
@@ -140,10 +146,20 @@ class Caixa {
       this.ponto(this.ptosaux[0]);
       this.ponto(this.ptosaux[1]);
       this.ponto(this.ptosaux[2]);
+
+      this.svg.append('path').attr('d',this.caminhoC+' Z '+this.caminhoQ+' Z')
+      .attr('fill', 'rgba(167, 199, 255, 0.5)').attr('stroke','black')
+      .attr('fill-rule','evenodd');
+      //this.svg.append('path').attr('d',this.caminhoQ).attr('fill', 'rgba(255, 255, 255, 0.75)').attr('stroke','black');
+      //this.svg.append('path').attr('d',this.caminhoQ).attr('fill', 'white').attr('stroke','black');
       this.contador=0;
       this.ptos=[];
       this.vecs=[];
       this.ptosaux=[];
+
+      this.caminhoQ='';
+      this.caminhoC='';
+      //this.svg.selectAll("circle").remove();
       this.svg.selectAll("line").remove();
     }
   }
@@ -168,13 +184,26 @@ class Caixa {
       .attr('d', 'M'+x0+' '+y0+' Q '+x1+','+y1+' '+x2+','+y2)
       .attr('fill','none')
       .attr('stroke','black');
-  }
+      
+      if(this.contador===3){
+        this.caminhoQ+='M'+x0+' '+y0+' Q '+x1+','+y1+' '+x2+','+y2;
+      }
+      else{
+        this.caminhoQ+=' Q '+x1+','+y1+' '+x2+','+y2;
+      }}
 
   cubica(x0,y0,x1,y1,x2,y2,x3,y3){
     this.svg.append('path')
       .attr('d', 'M'+x0+' '+y0+' C '+x1+','+y1+' '+x2+','+y2+' '+x3+','+y3)
       .attr('fill','none')
       .attr('stroke','black');
+
+      if(this.contador===3){
+        this.caminhoC+='M'+x0+' '+y0+' C '+x1+','+y1+' '+x2+','+y2+' '+x3+','+y3;
+      }
+      else{
+        this.caminhoC+=' C '+x1+','+y1+' '+x2+','+y2+' '+x3+','+y3;
+      }
   }
 
   resolvesis(x1,y1,a,b,x2,y2,c,d,m){
