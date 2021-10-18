@@ -17,7 +17,8 @@ class Caixa {
     this.ponto=this.ponto.bind(this);
     this.circulo=this.circulo.bind(this);
     this.linha=this.linha.bind(this);
-    this.caminho=this.caminho.bind(this);
+    this.cubica=this.cubica.bind(this);
+    this.quadratica=this.quadratica.bind(this);
     this.resolvesis=this.resolvesis.bind(this);
 
     this.donut=document.createElement('div');
@@ -62,7 +63,6 @@ class Caixa {
 
       this.ptos.push([e.x -largurão/4 -3,e.y -10]); //coloca o pto numa lista de ptos q vai ser usada mais tarde
 
-
       if(this.contador > 0){ //caso haja mais de um pto, já podemos criar algumas linhas
         const x1=this.ptos[this.contador -1][0]; //x do pto criado anteriormente
         const x2=this.ptos[this.contador][0]; //y do pto criado anteriormente
@@ -106,7 +106,9 @@ class Caixa {
 
             this.circulo(xm2,ym2,1);
 
-            this.caminho(x0,y0,this.xm0aux,this.ym0aux,xm2,ym2,x1,y1);
+            this.quadratica(this.xmaux,this.ymaux,x1,y1,xm1,ym1);
+
+            this.cubica(x0,y0,this.xm0aux,this.ym0aux,xm2,ym2,x1,y1);
 
           }
           this.xmaux=xm1;
@@ -115,9 +117,6 @@ class Caixa {
           this.xm0aux=xm0;
           this.ym0aux=ym0;
         }
-
-        
-
 
       }
 
@@ -164,7 +163,14 @@ class Caixa {
       .attr('stroke',cor[m]).attr('stroke-width','1px');
   }
 
-  caminho(x0,y0,x1,y1,x2,y2,x3,y3){
+  quadratica(x0,y0,x1,y1,x2,y2){
+    this.svg.append('path')
+      .attr('d', 'M'+x0+' '+y0+' Q '+x1+','+y1+' '+x2+','+y2)
+      .attr('fill','none')
+      .attr('stroke','black');
+  }
+
+  cubica(x0,y0,x1,y1,x2,y2,x3,y3){
     this.svg.append('path')
       .attr('d', 'M'+x0+' '+y0+' C '+x1+','+y1+' '+x2+','+y2+' '+x3+','+y3)
       .attr('fill','none')
