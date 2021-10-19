@@ -6,6 +6,8 @@ class Caixa {
     this.ptos=[]; //ptos de pontos
     this.vecs=[]; //vetores pto_1 - pto_1
 
+    this.cor=0;
+
     this.ptosaux=[];
 
     this.xmaux=0;
@@ -22,7 +24,9 @@ class Caixa {
     this.linha=this.linha.bind(this);
     this.cubica=this.cubica.bind(this);
     this.quadratica=this.quadratica.bind(this);
-    this.resolvesis=this.resolvesis.bind(this);
+    //this.continua=this.continua.bind(this);
+
+    //this.clickaux=[0,0];
 
     this.donut=document.createElement('div');
     this.donut.id='donuuut';
@@ -50,16 +54,16 @@ class Caixa {
       .attr('x', '5')
       .attr('y','35')
       .attr('fill', 'gold')
-      .on('click', (e,d) => {this.ainda_n_acabou=false}); //aqui chama a função que desenha
+      .on('click', (e,d) => {this.ainda_n_acabou=false});
+      
+      this.g = this.svg.append('g');
                
     this.svg.on('click', (e,d) => this.ponto(e)); //aquei escuta o evento click pra criar os ptos
   }
 
-  ponto(e){
-    console.log(e.x); //essa vai criar os ptos e linhas necessários
+  ponto(e){//essa vai criar os ptos e linhas necessários
     if(this.ainda_n_acabou){
       this.ptosaux.push({x: e.x , y: e.y});
-      console.log(this.ptosaux);
       const largurão=this.graficos.clientWidth; //a largura da janela no momento
 
       this.circulo(e.x -largurão/4 -3,e.y -10,0);
@@ -99,6 +103,8 @@ class Caixa {
           const xm0=x1+t*vetortan[0];
           const ym0=y1+t*vetortan[1];
           this.circulo(xm0,ym0,1);
+          this.linha(x1, y1, xm0, ym0,1);
+          this.linha(xm1, ym1, xm0, ym0,1);
 
           if(this.contador>2){
             const x0=this.ptos[this.contador -2][0];
@@ -106,6 +112,8 @@ class Caixa {
             const s = ((this.ymaux-y1)-(vetortan[1]/vetortan[0])*(this.xmaux-x1))/((this.vetaux[0]*vetortan[1])/vetortan[0] - this.vetaux[1]);
             const xm2=this.xmaux+s*this.vetaux[0];
             const ym2=this.ymaux+s*this.vetaux[1];
+            this.linha(x1, y1, xm2, ym2,1);
+            this.linha(this.xmaux, this.ymaux, xm2, ym2,1);
 
             this.circulo(xm2,ym2,1);
 
@@ -120,7 +128,6 @@ class Caixa {
           this.xm0aux=xm0;
           this.ym0aux=ym0;
         }
-
       }
 
       this.contador+=1;
@@ -133,23 +140,26 @@ class Caixa {
 
         this.caminhoQ='';
         this.caminhoC='';
-        this.svg.selectAll("circle").remove();
-        this.svg.selectAll("line").remove();
-        this.svg.selectAll("path").remove();
+        this.g.selectAll("circle").remove();
+        this.g.selectAll("line").remove();
+        this.g.selectAll("path").remove();
 
         this.apagou=false;
       }
     }
     else{
-      console.log('aa');
       this.ainda_n_acabou=true;
       this.ponto(this.ptosaux[0]);
       this.ponto(this.ptosaux[1]);
       this.ponto(this.ptosaux[2]);
 
-      this.svg.append('path').attr('d',this.caminhoC+' Z '+this.caminhoQ+' Z')
-      .attr('fill', 'rgba(167, 199, 255, 0.5)').attr('stroke','black')
-      .attr('fill-rule','evenodd');
+      this.g.append('path').attr('d',this.caminhoC+' Z '+this.caminhoQ+' Z')
+      .attr('fill', cores[this.cor]).attr('stroke','black')
+      .attr('fill-rule','evenodd')
+      .on('click', (e,d)=>this.desenha(e));/*
+      .attr('transform', 'rotate(30)')
+      .attr('duration','5000');*/
+      this.cor=( this.cor>10 ? 0 : this.cor+1);
       //this.svg.append('path').attr('d',this.caminhoQ).attr('fill', 'rgba(255, 255, 255, 0.75)').attr('stroke','black');
       //this.svg.append('path').attr('d',this.caminhoQ).attr('fill', 'white').attr('stroke','black');
       this.contador=0;
@@ -159,28 +169,29 @@ class Caixa {
 
       this.caminhoQ='';
       this.caminhoC='';
-      //this.svg.selectAll("circle").remove();
-      this.svg.selectAll("line").remove();
+      this.g.selectAll("circle.m").remove();
+      this.g.selectAll("line").remove();
     }
   }
 
   circulo(x,y,m){
-    this.svg.append('circle')
+    this.g.append('circle')
       .attr('cx',x)
       .attr('cy',y)
       .attr('r', raio[m])
       .attr('fill','none')
-      .attr('stroke','black');
+      .attr('stroke','black')
+      .attr('class', m > 0 ? 'm' : '');
   }
 
   linha(x1,y1,x2,y2,m){
-    this.svg.append('line')
+    this.g.append('line')
       .attr('x1', x1 ).attr('y1', y1).attr('x2', x2).attr('y2', y2)
       .attr('stroke',cor[m]).attr('stroke-width','1px');
   }
 
   quadratica(x0,y0,x1,y1,x2,y2){
-    this.svg.append('path')
+    this.g.append('path')
       .attr('d', 'M'+x0+' '+y0+' Q '+x1+','+y1+' '+x2+','+y2)
       .attr('fill','none')
       .attr('stroke','black');
@@ -193,7 +204,7 @@ class Caixa {
       }}
 
   cubica(x0,y0,x1,y1,x2,y2,x3,y3){
-    this.svg.append('path')
+    this.g.append('path')
       .attr('d', 'M'+x0+' '+y0+' C '+x1+','+y1+' '+x2+','+y2+' '+x3+','+y3)
       .attr('fill','none')
       .attr('stroke','black');
@@ -205,22 +216,23 @@ class Caixa {
         this.caminhoC+=' C '+x1+','+y1+' '+x2+','+y2+' '+x3+','+y3;
       }
   }
-
+/*
   resolvesis(x1,y1,a,b,x2,y2,c,d,m){
     const t=((y1-y2)-(d/c)*(x1-x2))/((a*d)/c - b);
     const x=x1+t*a;
     const y=y1+t*b;
     this.circulo(x,y,2);
   }
-
-  desenha(){
-    console.log('finge q desenhouh');/*
-    this.contador=0;
-    this.ptos=[]; //ptos de pontos
-    this.vecs=[];
-    this.svg='';*/
-
-
-  } 
-  
+*/
+  desenha(e){
+    e.stopPropagation();
+    const largurão=this.graficos.clientWidth;
+    /*
+    if(this.clickaux!=[(e.x -largurão/4 -3),(e.y -10)]){
+      e.target.style.transform+='translate('+(e.x -largurão/4 -3)-this.clickaux[0]+'px,'+(e.y -10)-this.clickaux[1]+'px)';
+      this.clickaux!=[(e.x -largurão/4 -3),(e.y -10)];
+    }*/
+    e.target.style.transformOrigin=(e.x -largurão/4 -3)+'px '+(e.y -10)+'px';
+    e.target.style.transform+='rotate(60deg)';
+  }
 }
