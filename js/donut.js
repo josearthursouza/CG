@@ -156,12 +156,10 @@ class Caixa {
       this.g.append('path').attr('d',this.caminhoC+' Z '+this.caminhoQ+' Z')
       .attr('fill', cores[this.cor]).attr('stroke','black')
       .attr('fill-rule','evenodd')
-      .on('click', (e,d)=>this.desenha(e));/*
-      .attr('transform', 'rotate(30)')
-      .attr('duration','5000');*/
-      this.cor=( this.cor>10 ? 0 : this.cor+1);
-      //this.svg.append('path').attr('d',this.caminhoQ).attr('fill', 'rgba(255, 255, 255, 0.75)').attr('stroke','black');
-      //this.svg.append('path').attr('d',this.caminhoQ).attr('fill', 'white').attr('stroke','black');
+      .on('click', (e,d)=>this.desenha(e))
+      ;
+
+      this.cor=( this.cor>9 ? 0 : this.cor+1);
       this.contador=0;
       this.ptos=[];
       this.vecs=[];
