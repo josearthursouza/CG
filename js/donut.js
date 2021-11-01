@@ -36,7 +36,7 @@ class Caixa {
       .attr('height','100%')
       .attr('width','100%');
 
-    this.apagou=false;
+    this.apagou=this.apagou.bind(this);
 
     this.svg.append('rect') //cria o botão que apaga
       .attr('width','25px')
@@ -44,9 +44,9 @@ class Caixa {
       .attr('x', '5')
       .attr('y','5')
       .attr('fill', 'red')
-      .on('click', (e,d) => {this.apagou=true}); //aqui ele muda a condição que vai fazer apagar os elementos
+      .on('click', (e,d) => this.apagou(e)); //aqui ele muda a condição que vai fazer apagar os elementos
 
-    this.ainda_n_acabou=true;
+    this.acabou=this.acabou.bind(this);
 
     this.svg.append('rect') //cria o botão que desenha
       .attr('width','25px')
@@ -54,7 +54,7 @@ class Caixa {
       .attr('x', '5')
       .attr('y','35')
       .attr('fill', 'gold')
-      .on('click', (e,d) => {this.ainda_n_acabou=false});
+      .on('click', (e,d) => this.acabou(e));
       
       this.g = this.svg.append('g');
                
@@ -62,13 +62,12 @@ class Caixa {
   }
 
   ponto(e){//essa vai criar os ptos e linhas necessários
-    if(this.ainda_n_acabou){
       this.ptosaux.push({x: e.x , y: e.y});
-      const largurão=this.graficos.clientWidth; //a largura da janela no momento
+      //const largurão=this.graficos.clientWidth; //a largura da janela no momento
 
-      this.circulo(e.x -largurão/4 -3,e.y -10,0);
+      this.circulo(e.x  -10,e.y -10,0);
 
-      this.ptos.push([e.x -largurão/4 -3,e.y -10]); //coloca o pto numa lista de ptos q vai ser usada mais tarde
+      this.ptos.push([e.x  -10,e.y -10]); //coloca o pto numa lista de ptos q vai ser usada mais tarde
 
       if(this.contador > 0){ //caso haja mais de um pto, já podemos criar algumas linhas
         const x1=this.ptos[this.contador -1][0]; //x do pto criado anteriormente
@@ -132,44 +131,46 @@ class Caixa {
 
       this.contador+=1;
 
-      if(this.apagou){
-        this.contador=0;
-        this.ptos=[];
-        this.vecs=[];
-        this.ptosaux=[];
+  }
 
-        this.caminhoQ='';
-        this.caminhoC='';
-        this.g.selectAll("circle").remove();
-        this.g.selectAll("line").remove();
-        this.g.selectAll("path").remove();
+  acabou(e){
+    e.stopPropagation();
 
-        this.apagou=false;
-      }
-    }
-    else{
-      this.ainda_n_acabou=true;
-      this.ponto(this.ptosaux[0]);
-      this.ponto(this.ptosaux[1]);
-      this.ponto(this.ptosaux[2]);
+    this.ponto(this.ptosaux[0]);
+    this.ponto(this.ptosaux[1]);
+    this.ponto(this.ptosaux[2]);
 
-      this.g.append('path').attr('d',this.caminhoC+' Z '+this.caminhoQ+' Z')
-      .attr('fill', cores[this.cor]).attr('stroke','black')
-      .attr('fill-rule','evenodd')
-      .on('click', (e,d)=>this.desenha(e))
-      ;
+    this.g.append('path').attr('d',this.caminhoC+' Z '+this.caminhoQ+' Z')
+    .attr('fill', cores[this.cor]).attr('stroke','black')
+    .attr('fill-rule','evenodd')
+    .on('click', (e,d)=>this.desenha(e))//---------------------------------------------------------------------
+    ;
 
-      this.cor=( this.cor>9 ? 0 : this.cor+1);
-      this.contador=0;
-      this.ptos=[];
-      this.vecs=[];
-      this.ptosaux=[];
+    this.cor=( this.cor>9 ? 0 : this.cor+1);
+    this.contador=0;
+    this.ptos=[];
+    this.vecs=[];
+    this.ptosaux=[];
 
-      this.caminhoQ='';
-      this.caminhoC='';
-      this.g.selectAll("circle.m").remove();
-      this.g.selectAll("line").remove();
-    }
+    this.caminhoQ='';
+    this.caminhoC='';
+    this.g.selectAll("circle.m").remove();
+    this.g.selectAll("line").remove();
+  }
+
+  apagou(e){
+    e.stopPropagation();
+    
+    this.contador=0;
+    this.ptos=[];
+    this.vecs=[];
+    this.ptosaux=[];
+
+    this.caminhoQ='';
+    this.caminhoC='';
+    this.g.selectAll("circle").remove();
+    this.g.selectAll("line").remove();
+    this.g.selectAll("path").remove();
   }
 
   circulo(x,y,m){
@@ -224,13 +225,13 @@ class Caixa {
 */
   desenha(e){
     e.stopPropagation();
-    const largurão=this.graficos.clientWidth;
+    //const largurão=this.graficos.clientWidth;
     /*
     if(this.clickaux!=[(e.x -largurão/4 -3),(e.y -10)]){
       e.target.style.transform+='translate('+(e.x -largurão/4 -3)-this.clickaux[0]+'px,'+(e.y -10)-this.clickaux[1]+'px)';
       this.clickaux!=[(e.x -largurão/4 -3),(e.y -10)];
     }*/
-    e.target.style.transformOrigin=(e.x -largurão/4 -3)+'px '+(e.y -10)+'px';
+    e.target.style.transformOrigin=(e.x -3)+'px '+(e.y -10)+'px';
     e.target.style.transform+='rotate(60deg)';
   }
 }
