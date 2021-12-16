@@ -1,0 +1,67 @@
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#histogramasRGB{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+figure{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+canvas{
+    border: 5px ridge peru;
+    padding: 2px;
+    margin: 5px;
+}
+
+h1{
+    font-family:'Roboto Slab',serif;
+    color: black;
+    font-size: 36px;
+}
+
+h2{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-family: 'Roboto Slab', serif;
+    font-size: 32px;
+    font-weight: bold;
+    color: rgb(51,51,51);
+}
+
+a{
+    font-family: 'Roboto Slab', serif;
+    font-size: 18px;
+    color: rgb(66,180,214);
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
+p{
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 18px;
+    line-height: 32px;
+    color: rgb(51,51,51);
+    margin-bottom: 0px;
+}
+
+h3{
+    font-family:'Roboto Slab',serif;
+    font-size: 27px;
+    font-weight: bold;
+    color:rgb(66, 180, 214);
+}
+

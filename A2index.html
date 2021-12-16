@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
+	<title> Processamento de imagens em Canvas </title>
+	<!comment: MathJax para equações matemáticas em TeX>
+	<script 
+	type="text/javascript" async
+	src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async>
+	</script>
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro|Roboto+Slab" rel="stylesheet">
+	<link rel="stylesheet" href="style2.css"/>
+    <script src="js2.js" defer></script>
+</head>
+<body>
+	<h1>Leitura, escrita e processamento de imagens com Canvas</h1>
+	
+	<h2>Trabalho de Computação Gráfica (A2) - José Arthur de Souza</h2>
+
+	<h3></h3>
+
+<figure>
+	<canvas id="imagemOriginal" ></canvas> 
+	<figcaption>
+		Imagem Original.
+	</figcaption>
+	</br>
+	<div id='histogramasRGB'>
+	<canvas id="Rr" width="255" height="200"></canvas>
+	<canvas id="Gg" width="255" height="200"></canvas>
+	<canvas id="Bb" width="255" height="200"></canvas>
+	</div>
+	<figcaption>
+		Histogramas de cada canal de cor (vermelho, verde e azul).
+	</figcaption>
+	</br>
+	<canvas id="lumin" ></canvas>
+	<figcaption>
+		Imagem em preto e branco.
+	</figcaption>
+	</br>
+	<canvas id="luminhist" width="255" height="200"></canvas>
+	<figcaption>
+		Histogramas do canal de cinza.
+	</figcaption>
+	</br>
+	<canvas id="imagemfiltrada" ></canvas>
+	<figcaption>
+		Imagem processada.
+	</figcaption>
+</figure>
+
+<p id='processinho'>
+</p>
+
+<p>
+	Tentar esse tutorial: <a href="http://rembound.com/articles/how-to-load-and-draw-images-with-html5-canvas">How to load with html5 Canvas</a>
+</p>
+
+</body>
+</html>
